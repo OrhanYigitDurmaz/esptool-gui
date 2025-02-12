@@ -10,35 +10,30 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-
+        include:
+          - os: windows-latest
+            artifact_name: esptool-gui.exe
+          - os: ubuntu-latest
+            artifact_name: esptool-gui
+          - os: macos-latest
+            artifact_name: esptool-gui
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: Create Executable
+        uses: sayyid5416/pyinstaller@v1
         with:
-          python-version: '3.x'  # Adjust if you need a specific Python version
-
-      - name: Install dependencies
-        run: |
-          pip install -r src/requirements.txt
-
-      - name: Install PyInstaller
-        run: |
-          pip install pyinstaller
-
-      - name: Build executable with PyInstaller
-        run: |
-          # Build a single executable without a console window (for a GUI app)
-          pyinstaller --onefile --noconsole --name esptool-gui src/esptool-gui.py
-
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: esptool-gui-${{ matrix.os }}
-          path: dist/
+          # Specify the Python version (adjust if needed)
+          python_ver: '3.x'
+          # Path to your main Python file (or .spec file)
+          spec: 'src/esptool-gui.py'
+          # Optional: path to your requirements file if you have dependencies
+          requirements: 'requirements.txt'
+          # PyInstaller options: build one file, assign a name, and hide the console window
+          options: '--onefile, --name "esptool-gui", --windowed'
+          # Upload the built executable with a custom name per OS
+          upload_exe_with_name: ${{ matrix.artifact_name }}
