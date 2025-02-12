@@ -1,0 +1,5 @@
+sys
+os
+PyQt6
+esptool
+time
