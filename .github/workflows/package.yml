@@ -32,7 +32,7 @@ jobs:
           # Path to your main Python file (or .spec file)
           spec: 'src/esptool-gui.py'
           # Optional: path to your requirements file if you have dependencies
-          requirements: 'requirements.txt'
+          requirements: 'src/requirements.txt'
           # PyInstaller options: build one file, assign a name, and hide the console window
           options: '--onefile, --name "esptool-gui", --windowed'
           # Upload the built executable with a custom name per OS
