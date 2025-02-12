@@ -22,7 +22,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'  # Change this if you need a specific version
+          python-version: '3.x'  # Adjust if you need a specific Python version
 
       - name: Install dependencies
         run: |
@@ -35,12 +35,11 @@ jobs:
 
       - name: Build executable with PyInstaller
         run: |
-          # The --onefile flag produces a single bundled executable.
-          # The --noconsole flag makes sure no console window opens (for GUI apps).
+          # Build a single executable without a console window (for a GUI app)
           pyinstaller --onefile --noconsole --name esptool-gui src/esptool-gui.py
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: esptool-gui-${{ matrix.os }}
           path: dist/
