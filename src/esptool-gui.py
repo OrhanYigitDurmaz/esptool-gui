@@ -109,14 +109,7 @@ class FlashWorker(QThread):
 class ESPFlasher(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("ESP32 Flasher")
-
-        #self.chip_combo_default.currentTextChanged.connect(
-        #    lambda chip: self.setWindowTitle("Espressif Flasher (PRO) " + esptool_version if chip == "Any" else chip + " Flasher (PRO) " + esptool_version)
-        #)
-        
-        current_text = self.windowTitle()
-        print("Current Window Text:", current_text)
+        self.setWindowTitle("ESPTool GUI Version 1.0 (esptool version: " + esptool_version + ")")
 
         screen_geo = QApplication.primaryScreen().availableGeometry()
         sw, sh = screen_geo.width(), screen_geo.height()
