@@ -24,16 +24,32 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Create Executable
-        uses: sayyid5416/pyinstaller@v1
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          # Specify the Python version (adjust if needed)
-          python_ver: '3.x'
-          # Path to your main Python file (or .spec file)
-          spec: 'src/mainw.py'
-          # Optional: path to your requirements file if you have dependencies
-          requirements: 'src/requirements.txt'
-          # PyInstaller options: build one file, assign a name, and hide the console window
-          options: '--onefile, --name "ESPTool-Simple-GUI", --windowed, --icon "src/espressif_logo.svg"'
-          # Upload the built executable with a custom name per OS
-          upload_exe_with_name: ${{ matrix.artifact_name }}
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r src/requirements.txt
+          pip install pyinstaller
+
+      - name: Build executable with PyInstaller
+        run: |
+          pyinstaller --onefile --name "ESPTool-Simple-GUI" --windowed --icon "src/espressif_logo.svg" "src/mainw.py"
+
+      - name: Determine executable path
+        id: exec_path
+        run: |
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            echo "path=dist/ESPTool-Simple-GUI.exe" >> $GITHUB_OUTPUT
+          else
+            echo "path=dist/ESPTool-Simple-GUI" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.artifact_name }}
+          path: ${{ steps.exec_path.outputs.path }}
