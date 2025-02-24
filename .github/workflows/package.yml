@@ -37,7 +37,7 @@ jobs:
 
       - name: Build executable with PyInstaller
         run: |
-          pyinstaller --onefile --name "ESPTool-Simple-GUI" --windowed --icon "src/espressif_logo.svg" "src/mainw.py"
+          pyinstaller --onefile --name "ESPTool-Simple-GUI" --windowed --icon "src/espressif_logo.ico" "src/mainw.py"
 
       - name: Determine executable path
         id: exec_path
