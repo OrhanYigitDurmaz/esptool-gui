@@ -15,10 +15,10 @@ jobs:
         include:
           - os: windows-latest
             artifact_name: esptool-gui-simple.exe
-          - os: ubuntu-latest
-            artifact_name: esptool-gui-simple
-          - os: macos-latest
-            artifact_name: esptool-gui-simple
+          #- os: ubuntu-latest
+          #  artifact_name: esptool-gui-simple
+          #- os: macos-latest
+          #  artifact_name: esptool-gui-simple
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
