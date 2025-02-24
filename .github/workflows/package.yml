@@ -1,4 +1,4 @@
-name: Build esptool GUI Executable
+name: Build ESPTool Simple GUI
 
 on:
   push:
@@ -14,11 +14,11 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            artifact_name: esptool-gui.exe
+            artifact_name: esptool-gui-simple.exe
           - os: ubuntu-latest
-            artifact_name: esptool-gui
+            artifact_name: esptool-gui-simple
           - os: macos-latest
-            artifact_name: esptool-gui
+            artifact_name: esptool-gui-simple
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout repository
@@ -30,10 +30,10 @@ jobs:
           # Specify the Python version (adjust if needed)
           python_ver: '3.x'
           # Path to your main Python file (or .spec file)
-          spec: 'src/esptool-gui.py'
+          spec: 'src/mainw.py'
           # Optional: path to your requirements file if you have dependencies
           requirements: 'src/requirements.txt'
           # PyInstaller options: build one file, assign a name, and hide the console window
-          options: '--onefile, --name "esptool-gui", --windowed'
+          options: '--onefile, --name "ESPTool-Simple-GUI", --windowed, --icon "src/espressif_logo.svg"'
           # Upload the built executable with a custom name per OS
           upload_exe_with_name: ${{ matrix.artifact_name }}
