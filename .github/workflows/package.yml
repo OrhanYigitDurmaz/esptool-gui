@@ -42,11 +42,8 @@ jobs:
       - name: Determine executable path
         id: exec_path
         run: |
-          if [ "${{ runner.os }}" = "Windows" ]; then
-            echo "path=dist/ESPTool-Simple-GUI.exe" >> $GITHUB_OUTPUT
-          else
-            echo "path=dist/ESPTool-Simple-GUI" >> $GITHUB_OUTPUT
-          fi
+          echo "path=dist/ESPTool-Simple-GUI.exe" >> $GITHUB_OUTPUT
+          
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
