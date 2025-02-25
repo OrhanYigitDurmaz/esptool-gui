@@ -58,18 +58,27 @@ jobs:
         echo "ESPTOOL_STUB1=${STUB_PATH1}" >> $GITHUB_ENV
         echo "ESPTOOL_STUB2=${STUB_PATH2}" >> $GITHUB_ENV
 
-    - name: Build with Nuitka Action
+    - name: Build with Nuitka Action (Windows)
+      if: matrix.os == 'windows-latest'
       uses: Nuitka/Nuitka-Action@main
       with:
         nuitka-version: main
         script-name: src/mainw.py
+        mode: onefile
         enable-plugins: pyside6
-        nuitka-flags: |
-          --onefile
-          --standalone
-          --follow-imports
-          --include-data-dir=${{ env.ESPTOOL_STUB1 }}=esptool/targets/stub_flasher/1
-          --include-data-dir=${{ env.ESPTOOL_STUB2 }}=esptool/targets/stub_flasher/2
+        include-data-dir: "${{ env.ESPTOOL_STUB1 }}=esptool/targets/stub_flasher/1,${{ env.ESPTOOL_STUB2 }}=esptool/targets/stub_flasher/2"
+
+    - name: Build with Nuitka Action (Linux/macOS)
+      if: matrix.os != 'windows-latest'
+      uses: Nuitka/Nuitka-Action@main
+      with:
+        nuitka-version: main
+        script-name: src/mainw.py
+        mode: onefile
+        enable-plugins: pyside6
+        include-data-dir: "${{ env.ESPTOOL_STUB1 }}=esptool/targets/stub_flasher/1,${{ env.ESPTOOL_STUB2 }}=esptool/targets/stub_flasher/2"
+
+
 
     - name: Rename built executable (Windows)
       if: matrix.os == 'windows-latest'
