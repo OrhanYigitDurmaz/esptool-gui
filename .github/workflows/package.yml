@@ -17,12 +17,8 @@ jobs:
         os: [windows-latest]
         python-version: ['3.12']
         include:
-          - os: ubuntu-latest
-            platform_name: linux
           - os: windows-latest
             platform_name: windows
-          - os: macos-latest
-            platform_name: macos
 
     steps:
     - name: Checkout repository
@@ -68,7 +64,7 @@ jobs:
         script-name: src/mainw.py
         mode: onefile
         enable-plugins: pyside6
-        windows-disable-console: true
+        disable-console: true
         include-data-dir: |
           ${{ env.ESPTOOL_STUB1 }}=esptool/targets/stub_flasher/1
           ${{ env.ESPTOOL_STUB2 }}=esptool/targets/stub_flasher/2
