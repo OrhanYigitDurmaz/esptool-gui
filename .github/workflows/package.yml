@@ -2,9 +2,9 @@ name: Build Python App with Nuitka
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
@@ -27,17 +27,17 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
-    
+
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
-        
+
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r src/requirements.txt
-    
+
     - name: Generate include paths for esptool (Windows)
       if: matrix.os == 'windows-latest'
       shell: pwsh
@@ -47,9 +47,6 @@ jobs:
         $stubPath2 = Join-Path $esptoolPath "targets\stub_flasher\2"
         echo "ESPTOOL_STUB1=$stubPath1" | Out-File -FilePath $env:GITHUB_ENV -Append
         echo "ESPTOOL_STUB2=$stubPath2" | Out-File -FilePath $env:GITHUB_ENV -Append
-        echo "Include paths for esptool:"
-        echo "Stub1: $stubPath1"
-        echo "Stub2: $stubPath2"
 
     - name: Generate include paths for esptool (Linux/macOS)
       if: matrix.os != 'windows-latest'
@@ -60,46 +57,32 @@ jobs:
         STUB_PATH2="${ESPTOOL_PATH}/targets/stub_flasher/2"
         echo "ESPTOOL_STUB1=${STUB_PATH1}" >> $GITHUB_ENV
         echo "ESPTOOL_STUB2=${STUB_PATH2}" >> $GITHUB_ENV
-        echo "Include paths for esptool:"
-        echo "Stub1: ${STUB_PATH1}"
-        echo "Stub2: ${STUB_PATH2}"
-    
-    - name: Build with Nuitka Action (Windows)
-      if: matrix.os == 'windows-latest'
-      uses: Nuitka/Nuitka-Action@main
-      with:
-        nuitka-version: main
-        script-name: src/mainw.py
-        onefile: true
-        standalone: true
-        follow-imports: true
-        enable-plugins: pyside6
-        include-data-dirs: "${{ env.ESPTOOL_STUB1 }}=esptool/targets/stub_flasher/1,${{ env.ESPTOOL_STUB2 }}=esptool/targets/stub_flasher/2"
 
-    - name: Build with Nuitka Action (Linux/macOS)
-      if: matrix.os != 'windows-latest'
+    - name: Build with Nuitka Action
       uses: Nuitka/Nuitka-Action@main
       with:
         nuitka-version: main
         script-name: src/mainw.py
-        onefile: true
-        standalone: true
-        follow-imports: true
         enable-plugins: pyside6
-        include-data-dirs: "${{ env.ESPTOOL_STUB1 }}=esptool/targets/stub_flasher/1,${{ env.ESPTOOL_STUB2 }}=esptool/targets/stub_flasher/2"
-        
+        nuitka-flags: |
+          --onefile
+          --standalone
+          --follow-imports
+          --include-data-dir=${{ env.ESPTOOL_STUB1 }}=esptool/targets/stub_flasher/1
+          --include-data-dir=${{ env.ESPTOOL_STUB2 }}=esptool/targets/stub_flasher/2
+
     - name: Rename built executable (Windows)
       if: matrix.os == 'windows-latest'
       run: |
         mkdir release
-        Move-Item -Path "src/build/mainw.exe" -Destination "release/mainw-${{ matrix.platform_name }}.exe"
+        Move-Item -Path "build/mainw.exe" -Destination "release/mainw-${{ matrix.platform_name }}.exe"
       shell: pwsh
 
     - name: Rename built executable (Linux/macOS)
       if: matrix.os != 'windows-latest'
       run: |
         mkdir -p release
-        mv src/build/mainw release/mainw-${{ matrix.platform_name }}
+        mv build/mainw release/mainw-${{ matrix.platform_name }}
       shell: bash
 
     - name: Upload artifact
@@ -108,19 +91,19 @@ jobs:
         name: mainw-${{ matrix.platform_name }}
         path: release/mainw-${{ matrix.platform_name }}${{ matrix.os == 'windows-latest' && '.exe' || '' }}
         retention-days: 7
-        
+
   create-release:
     name: Create Release
     needs: build
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/')
-    
+
     steps:
       - name: Download all artifacts
         uses: actions/download-artifact@v4
         with:
           path: artifacts
-          
+
       - name: Create Release
         uses: softprops/action-gh-release@v1
         with:
