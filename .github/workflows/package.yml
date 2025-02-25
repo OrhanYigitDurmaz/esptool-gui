@@ -48,35 +48,29 @@ jobs:
         echo "ESPTOOL_STUB1=$stubPath1" | Out-File -FilePath $env:GITHUB_ENV -Append
         echo "ESPTOOL_STUB2=$stubPath2" | Out-File -FilePath $env:GITHUB_ENV -Append
 
-    - name: Generate include paths for esptool (Linux/macOS)
-      if: matrix.os != 'windows-latest'
-      shell: bash
-      run: |
-        ESPTOOL_PATH=$(python -c "import esptool; import os; print(os.path.dirname(esptool.__file__))")
-        STUB_PATH1="${ESPTOOL_PATH}/targets/stub_flasher/1"
-        STUB_PATH2="${ESPTOOL_PATH}/targets/stub_flasher/2"
-        echo "ESPTOOL_STUB1=${STUB_PATH1}" >> $GITHUB_ENV
-        echo "ESPTOOL_STUB2=${STUB_PATH2}" >> $GITHUB_ENV
+    
 
-    - name: Build with Nuitka Action (Windows)
+    - name: Generate include paths for esptool (Windows)
       if: matrix.os == 'windows-latest'
-      uses: Nuitka/Nuitka-Action@main
-      with:
-        nuitka-version: main
-        script-name: src/mainw.py
-        mode: onefile
-        enable-plugins: pyside6
-        include-data-dir: "${{ env.ESPTOOL_STUB1 }}=esptool/targets/stub_flasher/1,${{ env.ESPTOOL_STUB2 }}=esptool/targets/stub_flasher/2"
+      shell: pwsh
+      run: |
+        $esptoolPath = python -c "import esptool; import os; print(os.path.dirname(esptool.__file__))"
+        # Convert backslashes to forward slashes
+        $stubPath1 = (Join-Path $esptoolPath "targets\stub_flasher\1") -replace '\\', '/'
+        $stubPath2 = (Join-Path $esptoolPath "targets\stub_flasher\2") -replace '\\', '/'
+        echo "ESPTOOL_STUB1=$stubPath1" | Out-File -FilePath $env:GITHUB_ENV -Append
+        echo "ESPTOOL_STUB2=$stubPath2" | Out-File -FilePath $env:GITHUB_ENV -Append
 
-    - name: Build with Nuitka Action (Linux/macOS)
-      if: matrix.os != 'windows-latest'
+    - name: Build with Nuitka Action
       uses: Nuitka/Nuitka-Action@main
       with:
         nuitka-version: main
         script-name: src/mainw.py
         mode: onefile
         enable-plugins: pyside6
-        include-data-dir: "${{ env.ESPTOOL_STUB1 }}=esptool/targets/stub_flasher/1,${{ env.ESPTOOL_STUB2 }}=esptool/targets/stub_flasher/2"
+        include-data-dir: |
+          ${{ env.ESPTOOL_STUB1 }}=esptool/targets/stub_flasher/1
+          ${{ env.ESPTOOL_STUB2 }}=esptool/targets/stub_flasher/2
 
 
 
