@@ -14,7 +14,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [windows-latest]
         python-version: ['3.12']
         include:
           - os: ubuntu-latest
@@ -68,6 +68,7 @@ jobs:
         script-name: src/mainw.py
         mode: onefile
         enable-plugins: pyside6
+        windows-disable-console: true
         include-data-dir: |
           ${{ env.ESPTOOL_STUB1 }}=esptool/targets/stub_flasher/1
           ${{ env.ESPTOOL_STUB2 }}=esptool/targets/stub_flasher/2
