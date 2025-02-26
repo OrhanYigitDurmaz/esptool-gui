@@ -69,6 +69,7 @@ jobs:
         include-data-dir: |
           ${{ env.ESPTOOL_STUB1 }}=esptool/targets/stub_flasher/1
           ${{ env.ESPTOOL_STUB2 }}=esptool/targets/stub_flasher/2
+        include-data-files: src/espressif_logo_256.ico=espressif_logo_256.ico
 
 
 
