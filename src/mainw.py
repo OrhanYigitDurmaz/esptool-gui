@@ -217,7 +217,7 @@ if __name__ == "__main__":
     app.setStyle("fusion")
 
     my_icon = QIcon()
-    my_icon.addFile('espressif_logo.svg')
+    my_icon.addFile('espressif_logo_256.ico')
 
     app.setWindowIcon(my_icon)
 

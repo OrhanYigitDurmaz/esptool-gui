@@ -65,6 +65,7 @@ jobs:
         mode: onefile
         enable-plugins: pyside6
         disable-console: true
+        windows-icon-from-ico: src/espressif_logo_256.ico
         include-data-dir: |
           ${{ env.ESPTOOL_STUB1 }}=esptool/targets/stub_flasher/1
           ${{ env.ESPTOOL_STUB2 }}=esptool/targets/stub_flasher/2
@@ -75,7 +76,7 @@ jobs:
       if: matrix.os == 'windows-latest'
       run: |
         mkdir release
-        Move-Item -Path "build/mainw.exe" -Destination "release/mainw-${{ matrix.platform_name }}.exe"
+        Move-Item -Path "build/mainw.exe" -Destination "release/esptoolgui-${{ matrix.platform_name }}.exe"
       shell: pwsh
 
     - name: Rename built executable (Linux/macOS)
@@ -89,7 +90,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: mainw-${{ matrix.platform_name }}
-        path: release/mainw-${{ matrix.platform_name }}${{ matrix.os == 'windows-latest' && '.exe' || '' }}
+        path: release/esptoolgui-${{ matrix.platform_name }}${{ matrix.os == 'windows-latest' && '.exe' || '' }}
         retention-days: 7
 
   create-release:
@@ -109,5 +110,5 @@ jobs:
         with:
           files: |
             artifacts/mainw-linux/mainw-linux
-            artifacts/mainw-windows/mainw-windows.exe
+            artifacts/mainw-windows/esptoolgui-windows.exe
             artifacts/mainw-macos/mainw-macos
