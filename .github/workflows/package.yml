@@ -32,7 +32,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r src/requirements.txt
+        pip install -r requirements.txt
 
     - name: Generate include paths for esptool (Windows)
       if: matrix.os == 'windows-latest'
@@ -61,15 +61,15 @@ jobs:
       uses: Nuitka/Nuitka-Action@main
       with:
         nuitka-version: main
-        script-name: src/mainw.py
+        script-name: mainw.py
         mode: onefile
         enable-plugins: pyside6
         disable-console: true
-        windows-icon-from-ico: src/espressif_logo_256.ico
+        windows-icon-from-ico: espressif_logo_256.ico
         include-data-dir: |
           ${{ env.ESPTOOL_STUB1 }}=esptool/targets/stub_flasher/1
           ${{ env.ESPTOOL_STUB2 }}=esptool/targets/stub_flasher/2
-        include-data-files: src/espressif_logo_256.ico=espressif_logo_256.ico
+        include-data-files: espressif_logo_256.ico=espressif_logo_256.ico
 
 
 
@@ -90,7 +90,7 @@ jobs:
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
-        name: mainw-${{ matrix.platform_name }}
+        name: esptoolguix64-${{ matrix.platform_name }}
         path: release/esptoolgui-${{ matrix.platform_name }}${{ matrix.os == 'windows-latest' && '.exe' || '' }}
         retention-days: 7
 
