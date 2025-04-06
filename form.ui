@@ -7,23 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>460</width>
-    <height>208</height>
+    <height>253</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>mainw</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="2" colspan="2">
-    <widget class="QPushButton" name="pushButton_eraseFlash">
-     <property name="text">
-      <string>Erase Flash</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1" colspan="2">
-    <widget class="QComboBox" name="comboBox_detectedDevices"/>
-   </item>
    <item row="0" column="0">
     <widget class="QLabel" name="label_deviceToFlash">
      <property name="text">
@@ -31,17 +21,17 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="3">
-    <widget class="QPushButton" name="pushButton_detectDevices">
-     <property name="text">
-      <string>Detect devices...</string>
-     </property>
-    </widget>
-   </item>
    <item row="1" column="0">
     <widget class="QLabel" name="label_firmwareFile">
      <property name="text">
       <string>Firmware File</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="label_status">
+     <property name="text">
+      <string>Status:</string>
      </property>
     </widget>
    </item>
@@ -62,10 +52,10 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="label_status">
-     <property name="text">
-      <string>Status:</string>
+   <item row="4" column="0" colspan="4">
+    <widget class="QTextEdit" name="log_text">
+     <property name="readOnly">
+      <bool>true</bool>
      </property>
     </widget>
    </item>
@@ -76,10 +66,33 @@
      </property>
     </widget>
    </item>
-   <item row="4" column="0" colspan="4">
-    <widget class="QTextEdit" name="log_text">
-     <property name="readOnly">
-      <bool>true</bool>
+   <item row="0" column="3">
+    <widget class="QPushButton" name="pushButton_detectDevices">
+     <property name="text">
+      <string>Detect devices...</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2" colspan="2">
+    <widget class="QPushButton" name="pushButton_eraseFlash">
+     <property name="text">
+      <string>Erase Flash</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" colspan="2">
+    <widget class="QComboBox" name="comboBox_detectedDevices"/>
+   </item>
+   <item row="5" column="0" colspan="4">
+    <widget class="QProgressBar" name="progressBar_flash">
+     <property name="value">
+      <number>0</number>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
     </widget>
    </item>

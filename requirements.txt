@@ -1,2 +1,2 @@
 PySide6
-esptool
+esptool>5.0
